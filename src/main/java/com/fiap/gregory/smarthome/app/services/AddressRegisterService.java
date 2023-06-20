@@ -1,11 +1,11 @@
 package com.fiap.gregory.smarthome.app.services;
 
-import com.fiap.gregory.smarthome.app.exceptions.BadRequestViolationException;
-import com.fiap.gregory.smarthome.app.exceptions.DataIntegratyViolationException;
 import com.fiap.gregory.smarthome.app.models.domains.AddressRegister;
 import com.fiap.gregory.smarthome.app.models.dtos.AddressRegisterDto;
 import com.fiap.gregory.smarthome.app.repositories.AddressRegisterRepository;
 import com.fiap.gregory.smarthome.app.request.AddressRegisterRequest;
+import com.fiap.gregory.smarthome.app.services.exceptions.BadRequestViolationException;
+import com.fiap.gregory.smarthome.app.services.exceptions.DataIntegratyViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AddressRegisterService {
         }
 
         findByStreetAndNumber(request);
-        var address = repository.save(mapper.map(request, AddressRegister.class));
+        var address = repository.save(toDomain(request));
 
         return mapper.map(address, AddressRegisterDto.class);
     }
@@ -40,5 +40,15 @@ public class AddressRegisterService {
         if (!isNullOrEmpty(address)) {
             throw new DataIntegratyViolationException(ADDRESS_ALREADY_EXISTS);
         }
+    }
+
+    private AddressRegister toDomain(AddressRegisterRequest request) {
+        return AddressRegister.builder()
+                .street(request.getStreet())
+                .number(Integer.valueOf(request.getNumber()))
+                .district(request.getDistrict())
+                .city(request.getCity())
+                .state(request.getState())
+                .build();
     }
 }

@@ -1,4 +1,4 @@
-package com.fiap.gregory.smarthome.app.exceptions;
+package com.fiap.gregory.smarthome.app.services.exceptions;
 
 public class BadRequestViolationException extends RuntimeException {
 
