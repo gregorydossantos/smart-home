@@ -1,4 +1,4 @@
 package com.fiap.gregory.smarthome.app.repositories;
 
-public class HomeApplianceManagementRepository {
+public interface HomeApplianceManagementRepository {
 }
