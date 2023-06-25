@@ -20,9 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ControllerExceptionHandlerTest {
 
     private static final String ADDRESS_ALREADY_EXISTS = "Endereço já cadastrado!";
+    private static final String APPLIANCE_ALREADY_EXISTS = "Eletrodoméstico já cadastrado!";
     private static final String BAD_REQUEST = "Erro no contexto da requisição!";
     private static final Integer ERROR_HTTP_CODE = 400;
     public static final String PATH_ADDRESS_REGISTER = "/address-register";
+    public static final String PATH_HOME_APPLIANCE = "/home-appliance";
     public static final LocalDateTime DATE_TIME_ERROR = LocalDateTime.now();
 
     @InjectMocks
@@ -66,6 +68,24 @@ class ControllerExceptionHandlerTest {
         assertEquals(BAD_REQUEST, response.getBody().getError());
         assertEquals(ERROR_HTTP_CODE, response.getBody().getStatus());
         assertNotEquals(PATH_ADDRESS_REGISTER, response.getBody().getPath());
+        assertNotEquals(DATE_TIME_ERROR, response.getBody().getTimestamp());
+    }
+
+    @Test
+    @DisplayName("Shloud be return DataIntegratyViolationException")
+    void testWhenHomeApplianceAlreadyExists() {
+        ResponseEntity<StandardError> response = exceptionHandler.dataIntegratyViolationException(
+                new DataIntegratyViolationException(APPLIANCE_ALREADY_EXISTS),
+                new MockHttpServletRequest());
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals(APPLIANCE_ALREADY_EXISTS, response.getBody().getError());
+        assertEquals(ERROR_HTTP_CODE, response.getBody().getStatus());
+        assertNotEquals(PATH_HOME_APPLIANCE, response.getBody().getPath());
         assertNotEquals(DATE_TIME_ERROR, response.getBody().getTimestamp());
     }
 }
