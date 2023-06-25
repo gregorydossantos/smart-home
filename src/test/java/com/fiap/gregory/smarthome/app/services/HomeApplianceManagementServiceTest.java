@@ -98,7 +98,7 @@ class HomeApplianceManagementServiceTest {
         when(repository.save(any())).thenReturn(homeAppliance);
 
         assertThrows(BadRequestViolationException.class, () -> {
-            service.create(null);
+            service.create(any());
         });
     }
 
