@@ -4,8 +4,8 @@ import com.fiap.gregory.smarthome.app.models.domains.AddressRegister;
 import com.fiap.gregory.smarthome.app.models.dtos.AddressRegisterDto;
 import com.fiap.gregory.smarthome.app.repositories.AddressRegisterRepository;
 import com.fiap.gregory.smarthome.app.request.AddressRegisterRequest;
-import com.fiap.gregory.smarthome.app.services.exceptions.BadRequestViolationException;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataIntegratyViolationException;
+import com.fiap.gregory.smarthome.app.useful.ValidationUseful;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,10 +24,11 @@ public class AddressRegisterService {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private ValidationUseful validator;
+
     public AddressRegisterDto create(AddressRegisterRequest request) {
-        if (isNullOrEmpty(request)) {
-            throw new BadRequestViolationException(BAD_REQUEST);
-        }
+        validator.validateRequest(request);
 
         findByStreetAndNumber(request);
         var address = repository.save(toDomain(request));

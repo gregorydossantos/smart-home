@@ -4,15 +4,14 @@ import com.fiap.gregory.smarthome.app.models.domains.PeopleManagement;
 import com.fiap.gregory.smarthome.app.models.dtos.PeopleManagementDto;
 import com.fiap.gregory.smarthome.app.repositories.PeopleManagementRepository;
 import com.fiap.gregory.smarthome.app.request.PeopleManagementRequest;
-import com.fiap.gregory.smarthome.app.services.exceptions.BadRequestViolationException;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataIntegratyViolationException;
+import com.fiap.gregory.smarthome.app.useful.ValidationUseful;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.fiap.gregory.smarthome.app.useful.StringUseful.convertToDate;
-import static com.fiap.gregory.smarthome.app.useful.StringUseful.isNullOrEmpty;
 
 @Service
 public class PeopleManagementService {
@@ -26,10 +25,11 @@ public class PeopleManagementService {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private ValidationUseful validator;
+
     public PeopleManagementDto create(PeopleManagementRequest request) {
-        if (isNullOrEmpty(request)) {
-            throw new BadRequestViolationException(BAD_REQUEST);
-        }
+        validator.validateRequest(request);
 
         existsHomeAppliance(request);
         var peopleManagement = repository.save(convertToDomain(request));

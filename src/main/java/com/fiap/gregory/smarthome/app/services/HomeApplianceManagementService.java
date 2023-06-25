@@ -4,14 +4,14 @@ import com.fiap.gregory.smarthome.app.models.domains.HomeApplianceManagement;
 import com.fiap.gregory.smarthome.app.models.dtos.HomeApplianceManagementDto;
 import com.fiap.gregory.smarthome.app.repositories.HomeApplianceManagementRepository;
 import com.fiap.gregory.smarthome.app.request.HomeApplianceManagementRequest;
-import com.fiap.gregory.smarthome.app.services.exceptions.BadRequestViolationException;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataIntegratyViolationException;
+import com.fiap.gregory.smarthome.app.useful.ValidationUseful;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.fiap.gregory.smarthome.app.useful.StringUseful.*;
+import static com.fiap.gregory.smarthome.app.useful.StringUseful.convertToInt;
 
 @Service
 public class HomeApplianceManagementService {
@@ -25,10 +25,11 @@ public class HomeApplianceManagementService {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private ValidationUseful validator;
+
     public HomeApplianceManagementDto create(HomeApplianceManagementRequest request) {
-        if (isNullOrEmpty(request)) {
-            throw new BadRequestViolationException(BAD_REQUEST);
-        }
+        validator.validateRequest(request);
 
         existsHomeAppliance(request);
         var homeApplianceManagement = repository.save(convertToDomain(request));

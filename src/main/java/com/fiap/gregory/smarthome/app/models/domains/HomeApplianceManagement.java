@@ -15,11 +15,8 @@ public class HomeApplianceManagement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
     private String name;
-    @Column(unique = true)
     private String model;
-    @Column(unique = true)
     private String brand;
     private Integer voltage;
 }
