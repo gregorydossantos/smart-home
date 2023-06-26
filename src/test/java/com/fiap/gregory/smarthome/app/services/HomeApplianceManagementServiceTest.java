@@ -39,10 +39,10 @@ class HomeApplianceManagementServiceTest {
     private HomeApplianceManagementService service;
 
     @Mock
-    HomeApplianceManagementRepository repository;
+    private HomeApplianceManagementRepository repository;
 
     @Mock
-    ModelMapper mapper;
+    private ModelMapper mapper;
 
     @BeforeEach
     void setUp() {
