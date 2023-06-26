@@ -38,10 +38,10 @@ class AddressRegisterServiceTest {
     private AddressRegisterService service;
 
     @Mock
-    AddressRegisterRepository repository;
+    private AddressRegisterRepository repository;
 
     @Mock
-    ModelMapper mapper;
+    private ModelMapper mapper;
 
     @BeforeEach
     void setUp() {
