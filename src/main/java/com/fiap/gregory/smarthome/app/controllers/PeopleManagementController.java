@@ -1,6 +1,6 @@
 package com.fiap.gregory.smarthome.app.controllers;
 
-import com.fiap.gregory.smarthome.app.models.dtos.HomeApplianceManagementDto;
+import com.fiap.gregory.smarthome.app.models.dtos.PeopleManagementDto;
 import com.fiap.gregory.smarthome.app.request.PeopleManagementRequest;
 import com.fiap.gregory.smarthome.app.services.PeopleManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class PeopleManagementController {
     private PeopleManagementService service;
 
     @PostMapping
-    public ResponseEntity<HomeApplianceManagementDto> create(@RequestBody PeopleManagementRequest request) {
+    public ResponseEntity<PeopleManagementDto> create(@RequestBody PeopleManagementRequest request) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .buildAndExpand(service.create(request)).toUri();
         return ResponseEntity.created(uri).build();
