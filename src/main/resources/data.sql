@@ -7,5 +7,5 @@ INSERT INTO tb_home_appliance_manager(name, model, brand, voltage)
     VALUES('Geladeira', 'Platinium', 'Samsung', 110);
 
 -- MASS OF DATA PEOPLE --
-INSERT INTO tb_people_manager(name, birthday, gender, parentage, ativo)
+INSERT INTO tb_people_manager(name, birthday, gender, parentage, active)
     VALUES('Gregory', '1989-12-28', 'M', 'Father', 'S');

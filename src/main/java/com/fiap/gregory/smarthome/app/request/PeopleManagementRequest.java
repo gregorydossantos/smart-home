@@ -29,5 +29,5 @@ public class PeopleManagementRequest {
 
     @NotNull
     @NotEmpty
-    private String ativo;
+    private String active;
 }

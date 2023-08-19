@@ -11,9 +11,8 @@ public class StringUseful {
     }
 
     public static Date convertToDate(String dateString) throws ParseException {
-        Date date;
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        return date = format.parse(dateString);
+        return format.parse(dateString);
     }
 
     public static Integer convertToInt(String str) {

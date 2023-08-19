@@ -33,7 +33,7 @@ class PeopleManagementServiceTest {
     private static final String BIRTHDAY = "1989-28-12";
     private static final String GENDER = "M";
     private static final String PARENTAGE = "Father";
-    private static final String ATIVO = "S";
+    private static final String ACTIVE = "S";
 
     private PeopleManagementRequest request;
     private PeopleManagementDto dto;
@@ -60,7 +60,7 @@ class PeopleManagementServiceTest {
                 .birthday(BIRTHDAY)
                 .gender(GENDER)
                 .parentage(PARENTAGE)
-                .ativo(ATIVO)
+                .active(ACTIVE)
                 .build();
 
         dto = PeopleManagementDto.builder()
@@ -69,7 +69,7 @@ class PeopleManagementServiceTest {
                 .birthday(convertToDate(BIRTHDAY))
                 .gender(GENDER)
                 .parentage(PARENTAGE)
-                .ativo(ATIVO)
+                .active(ACTIVE)
                 .build();
 
         peopleManagement = PeopleManagement.builder()
@@ -78,7 +78,7 @@ class PeopleManagementServiceTest {
                 .birthday(convertToDate(BIRTHDAY))
                 .gender(GENDER)
                 .parentage(PARENTAGE)
-                .ativo(ATIVO)
+                .active(ACTIVE)
                 .build();
     }
 
@@ -97,7 +97,7 @@ class PeopleManagementServiceTest {
         assertEquals(peopleManagement.getBirthday(), response.getBirthday());
         assertEquals(peopleManagement.getGender(), response.getGender());
         assertEquals(peopleManagement.getParentage(), response.getParentage());
-        assertEquals(peopleManagement.getAtivo(), response.getAtivo());
+        assertEquals(peopleManagement.getActive(), response.getActive());
     }
 
     @Test
@@ -113,7 +113,7 @@ class PeopleManagementServiceTest {
     @Test
     @DisplayName("Should be return DataIntegratyViolationException")
     void testAddressAlreadyExists() {
-        when(repository.findByNameAndAtivo(anyString(), anyString()))
+        when(repository.findByNameAndActive(anyString(), anyString()))
                 .thenReturn(Optional.ofNullable(peopleManagement));
 
         assertThrows(DataIntegratyViolationException.class, () -> {

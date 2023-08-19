@@ -22,5 +22,5 @@ public class PeopleManagementDto {
     private Date birthday;
     private String gender;
     private String parentage;
-    private String ativo;
+    private String active;
 }

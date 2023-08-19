@@ -38,7 +38,7 @@ public class PeopleManagementService {
     }
 
     private void existsHomeAppliance(PeopleManagementRequest request) {
-        var peopleManagement = repository.findByNameAndAtivo(request.getName(), request.getAtivo());
+        var peopleManagement = repository.findByNameAndActive(request.getName(), request.getActive());
         if (peopleManagement.isPresent()) {
             throw new DataIntegratyViolationException(PEOPLE_ALREADY_EXISTS);
         }
@@ -51,7 +51,7 @@ public class PeopleManagementService {
                 .birthday(convertToDate(request.getBirthday()))
                 .gender(request.getGender())
                 .parentage(request.getParentage())
-                .ativo(request.getAtivo())
+                .active(request.getActive())
                 .build();
     }
 }

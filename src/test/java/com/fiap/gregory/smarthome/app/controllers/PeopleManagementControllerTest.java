@@ -51,7 +51,7 @@ class PeopleManagementControllerTest {
                 .birthday(convertToDate(BIRHDAY))
                 .gender(GENDER)
                 .parentage(PARENTAGE)
-                .ativo(ATIVO)
+                .active(ATIVO)
                 .build();
 
         request = PeopleManagementRequest.builder()
@@ -59,7 +59,7 @@ class PeopleManagementControllerTest {
                 .birthday(BIRHDAY)
                 .gender(GENDER)
                 .parentage(PARENTAGE)
-                .ativo(ATIVO)
+                .active(ATIVO)
                 .build();
     }
 

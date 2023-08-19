@@ -24,5 +24,5 @@ public class PeopleManagement {
     private String gender;
     private String parentage;
     @Size(max = 1)
-    private String ativo;
+    private String active;
 }
