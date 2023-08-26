@@ -1,7 +1,9 @@
 package com.fiap.gregory.smarthome.app.services;
 
 import com.fiap.gregory.smarthome.app.models.domains.AddressRegister;
+import com.fiap.gregory.smarthome.app.models.domains.PeopleManagement;
 import com.fiap.gregory.smarthome.app.models.dtos.AddressRegisterDto;
+import com.fiap.gregory.smarthome.app.models.dtos.PeopleManagementDto;
 import com.fiap.gregory.smarthome.app.repositories.AddressRegisterRepository;
 import com.fiap.gregory.smarthome.app.request.AddressRegisterRequest;
 import com.fiap.gregory.smarthome.app.services.exceptions.BadRequestViolationException;
@@ -51,6 +53,8 @@ public class AddressRegisterService {
         if (addressList.isEmpty()) {
             throw new DataEmptyOrNullException(DATA_EMPTY_OR_NULL);
         }
+
+        addressList.forEach(addressRegister -> convertToPeopleDto(addressRegister.getPeopleManagement()));
 
         return addressList.stream().map(addressRegister -> mapper.map(addressRegister, AddressRegisterDto.class))
                 .collect(Collectors.toList());
@@ -110,5 +114,16 @@ public class AddressRegisterService {
         repository.saveAndFlush(addressChange);
 
         return addressChange;
+    }
+
+    private void convertToPeopleDto(PeopleManagement people) {
+        PeopleManagementDto.builder()
+                .id(people.getId())
+                .name(people.getName())
+                .birthday(people.getBirthday())
+                .gender(people.getGender())
+                .parentage(people.getParentage())
+                .active(people.getActive())
+                .build();
     }
 }

@@ -15,8 +15,13 @@ public class HomeApplianceManagement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String model;
     private String brand;
     private Integer voltage;
+
+    @ManyToOne
+    @JoinColumn(name = "people_id")
+    private PeopleManagement peopleManagement;
 }

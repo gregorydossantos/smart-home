@@ -26,7 +26,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(DataIntegratyViolationException.class)
     public ResponseEntity<StandardError> dataIntegratyViolationException(DataIntegratyViolationException ex,
-                                                                  HttpServletRequest request) {
+                                                                         HttpServletRequest request) {
         StandardError error = new StandardError(
                 LocalDateTime.now(), BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI()
         );
@@ -35,7 +35,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(DataEmptyOrNullException.class)
     public ResponseEntity<StandardError> dataEmptyOrNullException(DataEmptyOrNullException ex,
-                                                                         HttpServletRequest request) {
+                                                                  HttpServletRequest request) {
         StandardError error = new StandardError(
                 LocalDateTime.now(), BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI()
         );

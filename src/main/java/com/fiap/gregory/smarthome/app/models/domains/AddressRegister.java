@@ -16,12 +16,20 @@ public class AddressRegister {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String street;
+
     @Column(unique = true)
     private Integer number;
+
     private String district;
     private String city;
+
     @Size(max = 2)
     private String state;
+
+    @ManyToOne
+    @JoinColumn(name = "people_id")
+    private PeopleManagement peopleManagement;
 }
