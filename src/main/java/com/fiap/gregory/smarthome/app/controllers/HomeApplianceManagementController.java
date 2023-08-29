@@ -22,8 +22,7 @@ public class HomeApplianceManagementController {
 
     @PostMapping
     public ResponseEntity<HomeApplianceManagementDto> create(@RequestBody HomeApplianceManagementRequest request) {
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .buildAndExpand(service.create(request)).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(service.create(request)).toUri();
         return ResponseEntity.created(uri).build();
     }
 
@@ -35,8 +34,7 @@ public class HomeApplianceManagementController {
     @PutMapping(PATH_ID)
     public ResponseEntity<HomeApplianceManagementDto> update(@PathVariable("id") Long id,
                                                      @RequestBody HomeApplianceManagementRequest request) {
-        var response = service.update(id, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(service.update(id, request));
     }
 
     @DeleteMapping(PATH_ID)

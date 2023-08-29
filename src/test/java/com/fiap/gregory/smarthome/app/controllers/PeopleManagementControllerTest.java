@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
+import java.util.List;
 
 import static com.fiap.gregory.smarthome.app.useful.StringUseful.convertToDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +28,6 @@ class PeopleManagementControllerTest {
     private final static String BIRHDAY = "1989-12-28";
     private final static String GENDER = "M";
     private final static String PARENTAGE = "Father";
-    private final static String ATIVO = "S";
 
     private PeopleManagementRequest request;
     private PeopleManagementDto peopleManagementDto;
@@ -51,7 +51,6 @@ class PeopleManagementControllerTest {
                 .birthday(convertToDate(BIRHDAY))
                 .gender(GENDER)
                 .parentage(PARENTAGE)
-                .active(ATIVO)
                 .build();
 
         request = PeopleManagementRequest.builder()
@@ -59,7 +58,6 @@ class PeopleManagementControllerTest {
                 .birthday(BIRHDAY)
                 .gender(GENDER)
                 .parentage(PARENTAGE)
-                .active(ATIVO)
                 .build();
     }
 
@@ -72,5 +70,23 @@ class PeopleManagementControllerTest {
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should be return a list with all the people")
+    void getAllPeople() {
+        ResponseEntity<List<PeopleManagementDto>> response = controller.readAll();
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should be return update people")
+    void updatePeopleSuccess() {
+        ResponseEntity<List<PeopleManagementDto>> response = controller.readAll();
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }

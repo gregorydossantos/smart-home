@@ -3,20 +3,17 @@ package com.fiap.gregory.smarthome.app.services;
 import com.fiap.gregory.smarthome.app.models.domains.AddressRegister;
 import com.fiap.gregory.smarthome.app.models.domains.PeopleManagement;
 import com.fiap.gregory.smarthome.app.models.dtos.AddressRegisterDto;
-import com.fiap.gregory.smarthome.app.models.dtos.PeopleManagementDto;
 import com.fiap.gregory.smarthome.app.repositories.AddressRegisterRepository;
+import com.fiap.gregory.smarthome.app.repositories.PeopleManagementRepository;
 import com.fiap.gregory.smarthome.app.request.AddressRegisterRequest;
-import com.fiap.gregory.smarthome.app.services.exceptions.BadRequestViolationException;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataIntegratyViolationException;
-import com.fiap.gregory.smarthome.app.useful.StringUseful;
 import com.fiap.gregory.smarthome.app.useful.ValidationUseful;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.fiap.gregory.smarthome.app.useful.StringUseful.isNullOrEmpty;
@@ -25,12 +22,15 @@ import static com.fiap.gregory.smarthome.app.useful.StringUseful.isNullOrEmpty;
 public class AddressRegisterService {
 
     private static final String ADDRESS_ALREADY_EXISTS = "Endereço já cadastrado!";
-    private static final String BAD_REQUEST = "Erro no contexto da requisição!";
     private static final String DATA_EMPTY_OR_NULL = "Nenhum endereço encontrado!";
-    private static final String REGISTER_NOT_FOUND = "Endereço inesxistente!";
+    private static final String ADDRESS_NOT_FOUND = "Endereço inesxistente!";
+    private static final String PEOPLE_NOT_FOUND = "Pessoa não encontrada!";
 
     @Autowired
     private AddressRegisterRepository repository;
+
+    @Autowired
+    private PeopleManagementRepository peopleRepository;
 
     @Autowired
     private ModelMapper mapper;
@@ -41,7 +41,8 @@ public class AddressRegisterService {
     public AddressRegisterDto create(AddressRegisterRequest request) {
         validator.validateRequest(request);
 
-        findByStreetAndNumber(request);
+        addressExists(request);
+        peopleExists(Long.valueOf(request.getPeopleId()));
         var address = repository.save(toDomain(request));
 
         return mapper.map(address, AddressRegisterDto.class);
@@ -51,10 +52,8 @@ public class AddressRegisterService {
         var addressList = repository.findAll();
 
         if (addressList.isEmpty()) {
-            throw new DataEmptyOrNullException(DATA_EMPTY_OR_NULL);
+            throw new DataEmptyOrNullException(ADDRESS_NOT_FOUND);
         }
-
-        addressList.forEach(addressRegister -> convertToPeopleDto(addressRegister.getPeopleManagement()));
 
         return addressList.stream().map(addressRegister -> mapper.map(addressRegister, AddressRegisterDto.class))
                 .collect(Collectors.toList());
@@ -65,16 +64,16 @@ public class AddressRegisterService {
 
         var address = repository.findById(id);
 
-        var addressChange = updateAddress(address, request);
+        if (address.isEmpty()) {
+            throw new DataEmptyOrNullException(ADDRESS_NOT_FOUND);
+        }
+
+        var addressChange = updateAddress(address.get(), request);
 
         return mapper.map(addressChange, AddressRegisterDto.class);
     }
 
     public void delete(Long id) {
-        if (StringUseful.isNullOrEmpty(id)) {
-            throw new BadRequestViolationException(BAD_REQUEST);
-        }
-
         var address = repository.findById(id);
         if (address.isEmpty()) {
             throw new DataEmptyOrNullException(DATA_EMPTY_OR_NULL);
@@ -83,47 +82,53 @@ public class AddressRegisterService {
         repository.delete(address.get());
     }
 
-    private void findByStreetAndNumber(AddressRegisterRequest request) {
-        var address = repository.findByStreetAndNumber(request.getStreet(), Integer.valueOf(request.getNumber()));
+    private void addressExists(AddressRegisterRequest request) {
+        var address = repository.findByStreetAndDistrictAndCity(request.getStreet(), request.getDistrict(),
+                request.getCity());
         if (!isNullOrEmpty(address)) {
             throw new DataIntegratyViolationException(ADDRESS_ALREADY_EXISTS);
         }
     }
 
+    private void peopleExists(Long id) {
+        var people = peopleRepository.findById(id).get();
+        if (isNullOrEmpty(people)) {
+            throw new DataEmptyOrNullException(PEOPLE_NOT_FOUND);
+        }
+    }
+
     private AddressRegister toDomain(AddressRegisterRequest request) {
+        var people = peopleRepository.findById(Long.parseLong(request.getPeopleId())).get();
         return AddressRegister.builder()
                 .street(request.getStreet())
-                .number(Integer.valueOf(request.getNumber()))
+                .number(Integer.parseInt(request.getNumber()))
                 .district(request.getDistrict())
                 .city(request.getCity())
                 .state(request.getState())
+                .peopleManagement(PeopleManagement.builder()
+                        .id(people.getId())
+                        .name(people.getName())
+                        .birthday(people.getBirthday())
+                        .gender(people.getGender())
+                        .parentage(people.getParentage())
+                        .build())
                 .build();
     }
 
-    private AddressRegister updateAddress(Optional<AddressRegister> address, AddressRegisterRequest request) {
-        if (address.isEmpty()) {
-            throw new DataEmptyOrNullException(REGISTER_NOT_FOUND);
+    private AddressRegister updateAddress(AddressRegister address, AddressRegisterRequest request) {
+        var people = peopleRepository.findById(Long.parseLong(request.getPeopleId()));
+        if (people.isEmpty()) {
+            throw new DataEmptyOrNullException(PEOPLE_NOT_FOUND);
         }
 
-        var addressChange = address.get();
-        addressChange.setStreet(request.getStreet());
-        addressChange.setNumber(Integer.parseInt(request.getNumber()));
-        addressChange.setDistrict(request.getDistrict());
-        addressChange.setCity(request.getCity());
-        addressChange.setState(addressChange.getState());
-        repository.saveAndFlush(addressChange);
+        address.setStreet(request.getStreet());
+        address.setNumber(Integer.parseInt(request.getNumber()));
+        address.setDistrict(request.getDistrict());
+        address.setCity(request.getCity());
+        address.setState(request.getState());
+        address.setPeopleManagement(people.get());
+        repository.saveAndFlush(address);
 
-        return addressChange;
-    }
-
-    private void convertToPeopleDto(PeopleManagement people) {
-        PeopleManagementDto.builder()
-                .id(people.getId())
-                .name(people.getName())
-                .birthday(people.getBirthday())
-                .gender(people.getGender())
-                .parentage(people.getParentage())
-                .active(people.getActive())
-                .build();
+        return address;
     }
 }

@@ -34,8 +34,7 @@ public class AddressRegisterController {
     @PutMapping(PATH_ID)
     public ResponseEntity<AddressRegisterDto> update(@PathVariable("id") Long id,
                                                      @RequestBody AddressRegisterRequest request) {
-        var response = service.update(id, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(service.update(id, request));
     }
 
     @DeleteMapping(PATH_ID)

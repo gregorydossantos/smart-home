@@ -1,6 +1,6 @@
 -- MASS OF DATA PEOPLE --
-INSERT INTO tb_people_manager(name, birthday, gender, parentage, active)
-    VALUES('Gregory', '1989-12-28', 'M', 'Father', 'S');
+INSERT INTO tb_people_manager(name, birthday, gender, parentage)
+    VALUES('Gregory', '1989-12-28', 'M', 'Father');
 
 -- MASS OF DATA ADDRESS --
 INSERT INTO tb_address_register(street, number, district, city, state, people_id)

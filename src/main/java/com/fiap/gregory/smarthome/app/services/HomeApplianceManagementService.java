@@ -3,13 +3,11 @@ package com.fiap.gregory.smarthome.app.services;
 import com.fiap.gregory.smarthome.app.models.domains.HomeApplianceManagement;
 import com.fiap.gregory.smarthome.app.models.domains.PeopleManagement;
 import com.fiap.gregory.smarthome.app.models.dtos.HomeApplianceManagementDto;
-import com.fiap.gregory.smarthome.app.models.dtos.PeopleManagementDto;
 import com.fiap.gregory.smarthome.app.repositories.HomeApplianceManagementRepository;
+import com.fiap.gregory.smarthome.app.repositories.PeopleManagementRepository;
 import com.fiap.gregory.smarthome.app.request.HomeApplianceManagementRequest;
-import com.fiap.gregory.smarthome.app.services.exceptions.BadRequestViolationException;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataIntegratyViolationException;
-import com.fiap.gregory.smarthome.app.useful.StringUseful;
 import com.fiap.gregory.smarthome.app.useful.ValidationUseful;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.fiap.gregory.smarthome.app.useful.StringUseful.convertToInt;
@@ -26,12 +23,14 @@ import static com.fiap.gregory.smarthome.app.useful.StringUseful.convertToInt;
 public class HomeApplianceManagementService {
 
     private static final String APPLIANCE_ALREADY_EXISTS = "Eletrodoméstico já cadastrado!";
-    private static final String BAD_REQUEST = "Erro no contexto da requisição!";
-    private static final String DATA_EMPTY_OR_NULL = "Nenhum endereço encontrado!";
-    private static final String REGISTER_NOT_FOUND = "Endereço inesxistente!";
+    private static final String APPLIANCE_NOT_FOUND = "Eletrodoméstico não encontrado!";
+    private static final String PEOPLE_NOT_FOUND = "Pessoa não encontrada!";
 
     @Autowired
     private HomeApplianceManagementRepository repository;
+
+    @Autowired
+    private PeopleManagementRepository peopleRepository;
 
     @Autowired
     private ModelMapper mapper;
@@ -52,11 +51,8 @@ public class HomeApplianceManagementService {
         var homeApplianceManagementList = repository.findAll();
 
         if (homeApplianceManagementList.isEmpty()) {
-            throw new DataEmptyOrNullException(DATA_EMPTY_OR_NULL);
+            throw new DataEmptyOrNullException(APPLIANCE_NOT_FOUND);
         }
-
-        homeApplianceManagementList.forEach(homeApplianceManagement ->
-                convertToPeopleDto(homeApplianceManagement.getPeopleManagement()));
 
         return homeApplianceManagementList.stream().map(homeApplianceManagement ->
                         mapper.map(homeApplianceManagement, HomeApplianceManagementDto.class))
@@ -66,21 +62,20 @@ public class HomeApplianceManagementService {
     public HomeApplianceManagementDto update(Long id, HomeApplianceManagementRequest request) {
         validator.validateRequest(request);
 
-        var homeApplianceManagement = repository.findById(id);
+        var homeAppliance = repository.findById(id);
+        if (homeAppliance.isEmpty()) {
+            throw new DataEmptyOrNullException(APPLIANCE_NOT_FOUND);
+        }
 
-        var homeApplianceManagementChange = updateHomeAppliance(homeApplianceManagement, request);
+        var homeApplianceManagementChange = updateHomeAppliance(homeAppliance.get(), request);
 
         return mapper.map(homeApplianceManagementChange, HomeApplianceManagementDto.class);
     }
 
     public void delete(Long id) {
-        if (StringUseful.isNullOrEmpty(id)) {
-            throw new BadRequestViolationException(BAD_REQUEST);
-        }
-
         var homeApplianceManagement = repository.findById(id);
         if (homeApplianceManagement.isEmpty()) {
-            throw new DataEmptyOrNullException(DATA_EMPTY_OR_NULL);
+            throw new DataEmptyOrNullException(APPLIANCE_NOT_FOUND);
         }
 
         repository.delete(homeApplianceManagement.get());
@@ -96,37 +91,35 @@ public class HomeApplianceManagementService {
 
     @SneakyThrows
     private HomeApplianceManagement convertToDomain(HomeApplianceManagementRequest request) {
+        var people = peopleExists(Long.parseLong(request.getPeopleId()));
+
         return HomeApplianceManagement.builder()
                 .name(request.getName())
                 .model(request.getModel())
                 .brand(request.getBrand())
                 .voltage(convertToInt(request.getVoltage()))
+                .peopleManagement(people)
                 .build();
     }
 
-    private HomeApplianceManagement updateHomeAppliance(Optional<HomeApplianceManagement> homeAppliance, HomeApplianceManagementRequest request) {
-        if (homeAppliance.isEmpty()) {
-            throw new DataEmptyOrNullException(REGISTER_NOT_FOUND);
+    private HomeApplianceManagement updateHomeAppliance(HomeApplianceManagement homeAppliance, HomeApplianceManagementRequest request) {
+        var people = peopleExists(Long.parseLong(request.getPeopleId()));
+
+        homeAppliance.setName(request.getName());
+        homeAppliance.setBrand(request.getBrand());
+        homeAppliance.setModel(request.getModel());
+        homeAppliance.setVoltage(Integer.parseInt(request.getVoltage()));
+        homeAppliance.setPeopleManagement(people);
+        repository.saveAndFlush(homeAppliance);
+
+        return homeAppliance;
+    }
+
+    private PeopleManagement peopleExists(Long id) {
+        var people = peopleRepository.findById(id);
+        if (people.isEmpty()) {
+            throw new DataEmptyOrNullException(PEOPLE_NOT_FOUND);
         }
-
-        var homeApplianceChange = homeAppliance.get();
-        homeApplianceChange.setName(request.getName());
-        homeApplianceChange.setBrand(request.getBrand());
-        homeApplianceChange.setModel(request.getModel());
-        homeApplianceChange.setVoltage(Integer.parseInt(request.getVoltage()));
-        repository.saveAndFlush(homeApplianceChange);
-
-        return homeApplianceChange;
-    }
-
-    private void convertToPeopleDto(PeopleManagement people) {
-        PeopleManagementDto.builder()
-                .id(people.getId())
-                .name(people.getName())
-                .birthday(people.getBirthday())
-                .gender(people.getGender())
-                .parentage(people.getParentage())
-                .active(people.getActive())
-                .build();
+        return people.get();
     }
 }

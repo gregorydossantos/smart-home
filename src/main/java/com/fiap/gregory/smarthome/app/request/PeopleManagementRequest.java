@@ -26,8 +26,4 @@ public class PeopleManagementRequest {
     @NotNull
     @NotEmpty
     private String parentage;
-
-    @NotNull
-    @NotEmpty
-    private String active;
 }

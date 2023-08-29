@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @Data
@@ -27,6 +28,9 @@ public class PeopleManagement {
 
     private String parentage;
 
-    @Size(max = 1)
-    private String active;
+    @OneToMany(mappedBy = "peopleManagement")
+    private List<AddressRegister> addressRegisterList;
+
+    @OneToMany(mappedBy = "peopleManagement")
+    private List<HomeApplianceManagement> homeApplianceList;
 }
