@@ -1,20 +1,26 @@
 spring:
   datasource:
-    hikari:
-      connection-test-query: SELECT 1
-      minimum-idle: 1
-      maximum-pool-size: 10
-      pool-name: smart-home-database-pool
-      auto-commit: false
-      connection-timeout: 30000
+#    hikari:
+#      connection-test-query: SELECT 1
+#      minimum-idle: 1
+#      maximum-pool-size: 10
+#      pool-name: smart-home-database-pool
+#      auto-commit: false
+#      connection-timeout: 30000
+    driver-class-name: org.postgresql.Driver
     url: "jdbc:postgresql://localhost:5433/smart_home_db"
-    username: postgres
-    password: 12345
-    type: com.zaxxer.hikari.HikariDataSource
+    username: "postgres"
+    password: "12345"
+#    type: com.zaxxer.hikari.HikariDataSource
   jpa:
-    properties:
-      hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+#    properties:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: postgresql
+    open-in-view: true
+    generate-ddl: true
+#        jdbc:
+#          lob:
+#            non_contextual_creation: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
