@@ -42,8 +42,8 @@ public class AddressRegisterService {
         validator.validateRequest(request);
 
         addressExists(request);
-        peopleExists(Long.valueOf(request.getPeopleId()));
-        var address = repository.save(toDomain(request));
+        var people = peopleExists(Long.valueOf(request.getPeopleId()));
+        var address = repository.save(toDomain(request, people));
 
         return mapper.map(address, AddressRegisterDto.class);
     }
@@ -68,7 +68,8 @@ public class AddressRegisterService {
             throw new DataEmptyOrNullException(ADDRESS_NOT_FOUND);
         }
 
-        var addressChange = updateAddress(address.get(), request);
+        var people = peopleExists(Long.valueOf(request.getPeopleId()));
+        var addressChange = updateAddress(address.get(), request, people);
 
         return mapper.map(addressChange, AddressRegisterDto.class);
     }
@@ -90,15 +91,7 @@ public class AddressRegisterService {
         }
     }
 
-    private void peopleExists(Long id) {
-        var people = peopleRepository.findById(id).get();
-        if (isNullOrEmpty(people)) {
-            throw new DataEmptyOrNullException(PEOPLE_NOT_FOUND);
-        }
-    }
-
-    private AddressRegister toDomain(AddressRegisterRequest request) {
-        var people = peopleRepository.findById(Long.parseLong(request.getPeopleId())).get();
+    private AddressRegister toDomain(AddressRegisterRequest request, PeopleManagement people) {
         return AddressRegister.builder()
                 .street(request.getStreet())
                 .number(Integer.parseInt(request.getNumber()))
@@ -115,20 +108,23 @@ public class AddressRegisterService {
                 .build();
     }
 
-    private AddressRegister updateAddress(AddressRegister address, AddressRegisterRequest request) {
-        var people = peopleRepository.findById(Long.parseLong(request.getPeopleId()));
-        if (people.isEmpty()) {
-            throw new DataEmptyOrNullException(PEOPLE_NOT_FOUND);
-        }
-
+    private AddressRegister updateAddress(AddressRegister address, AddressRegisterRequest request, PeopleManagement people) {
         address.setStreet(request.getStreet());
         address.setNumber(Integer.parseInt(request.getNumber()));
         address.setDistrict(request.getDistrict());
         address.setCity(request.getCity());
         address.setState(request.getState());
-        address.setPeopleManagement(people.get());
+        address.setPeopleManagement(people);
         repository.saveAndFlush(address);
 
         return address;
+    }
+
+    private PeopleManagement peopleExists(Long id) {
+        var people = peopleRepository.findById(id);
+        if (people.isEmpty()) {
+            throw new DataEmptyOrNullException(PEOPLE_NOT_FOUND);
+        }
+        return people.get();
     }
 }
