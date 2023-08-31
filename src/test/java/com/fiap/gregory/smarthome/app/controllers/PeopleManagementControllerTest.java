@@ -19,11 +19,13 @@ import java.util.List;
 import static com.fiap.gregory.smarthome.app.useful.StringUseful.convertToDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class PeopleManagementControllerTest {
 
+    private final static Long ID = 1L;
     private final static String NAME = "Teste";
     private final static String BIRHDAY = "1989-12-28";
     private final static String GENDER = "M";
@@ -46,7 +48,7 @@ class PeopleManagementControllerTest {
 
     private void mockDatas() throws ParseException {
         peopleManagementDto = PeopleManagementDto.builder()
-                .id(1L)
+                .id(ID)
                 .name(NAME)
                 .birthday(convertToDate(BIRHDAY))
                 .gender(GENDER)
@@ -63,7 +65,7 @@ class PeopleManagementControllerTest {
 
     @Test
     @DisplayName("Should be return a Http status 201 - Created")
-    void createAddressWithSuccess() {
+    void testCreateAddressWithSuccess() {
         when(service.create(any())).thenReturn(peopleManagementDto);
 
         ResponseEntity<PeopleManagementDto> response = controller.create(request);
@@ -74,7 +76,7 @@ class PeopleManagementControllerTest {
 
     @Test
     @DisplayName("Should be return a list with all the people")
-    void getAllPeople() {
+    void testGetAListAllPeople() {
         ResponseEntity<List<PeopleManagementDto>> response = controller.readAll();
 
         assertEquals(ResponseEntity.class, response.getClass());
@@ -83,10 +85,20 @@ class PeopleManagementControllerTest {
 
     @Test
     @DisplayName("Should be return update people")
-    void updatePeopleSuccess() {
-        ResponseEntity<List<PeopleManagementDto>> response = controller.readAll();
+    void testUpdatePeopleSuccess() {
+        when(service.update(anyLong(), any())).thenReturn(peopleManagementDto);
+
+        ResponseEntity<PeopleManagementDto> response = controller.update(ID, request);
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should be delete people")
+    void testDeletePeopleSuccess() {
+        controller.delete(ID);
+
+        assertEquals(HttpStatus.OK.value(), 200);
     }
 }
