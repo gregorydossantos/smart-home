@@ -32,4 +32,9 @@ public class AddressRegisterRequest {
     @NotEmpty
     @Size(max = 2)
     private String state;
+
+    @NotNull
+    @NotEmpty
+    @ValidateInteger(message = "Valor invalido")
+    private String peopleId;
 }

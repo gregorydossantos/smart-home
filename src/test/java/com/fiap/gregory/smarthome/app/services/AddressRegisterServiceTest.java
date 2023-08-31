@@ -108,7 +108,8 @@ class AddressRegisterServiceTest {
     @Test
     @DisplayName("Should be return DataIntegratyViolationException")
     void testAddressAlreadyExists() {
-        when(repository.findByStreetAndNumber(anyString(), anyInt())).thenReturn(addressRegister);
+        when(repository.findByStreetAndDistrictAndCity(anyString(), anyString(), anyString()))
+                .thenReturn(addressRegister);
 
         assertThrows(DataIntegratyViolationException.class, () -> {
             service.create(request);

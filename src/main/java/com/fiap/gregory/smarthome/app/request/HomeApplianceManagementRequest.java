@@ -1,5 +1,6 @@
 package com.fiap.gregory.smarthome.app.request;
 
+import com.fiap.gregory.smarthome.app.annotations.ValidateInteger;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -24,4 +25,9 @@ public class HomeApplianceManagementRequest {
     @NotNull
     @NotEmpty
     private String voltage;
+
+    @NotNull
+    @NotEmpty
+    @ValidateInteger(message = "Valor invalido")
+    private String peopleId;
 }

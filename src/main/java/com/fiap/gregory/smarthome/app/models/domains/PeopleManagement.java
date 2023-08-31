@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @Data
@@ -18,11 +19,18 @@ public class PeopleManagement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private Date birthday;
+
     @Size(max = 1)
     private String gender;
+
     private String parentage;
-    @Size(max = 1)
-    private String active;
+
+    @OneToMany(mappedBy = "peopleManagement")
+    private List<AddressRegister> addressRegisterList;
+
+    @OneToMany(mappedBy = "peopleManagement")
+    private List<HomeApplianceManagement> homeApplianceList;
 }

@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface PeopleManagementRepository extends JpaRepository<PeopleManagement, Long> {
 
-    Optional<PeopleManagement> findByNameAndActive(String name, String active);
+    Optional<PeopleManagement> findByNameAndGenderAndParentage(String name, String gender, String parentage);
 }
