@@ -29,7 +29,7 @@ public class AddressRegister {
     @Size(max = 2)
     private String state;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "people_id")
     private PeopleManagement peopleManagement;
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.fiap.gregory.smarthome.app.useful.StringUseful.convertToDate;
+import static com.fiap.gregory.smarthome.app.useful.StringUseful.isNullOrEmpty;
 
 @Service
 public class PeopleManagementService {
@@ -78,7 +79,7 @@ public class PeopleManagementService {
     private void peopleExists(PeopleManagementRequest request) {
         var peopleManagement = repository.findByNameAndGenderAndParentage(request.getName(), request.getGender(),
                 request.getParentage());
-        if (peopleManagement.isPresent()) {
+        if (!isNullOrEmpty(peopleManagement)) {
             throw new DataIntegratyViolationException(PEOPLE_ALREADY_EXISTS);
         }
     }

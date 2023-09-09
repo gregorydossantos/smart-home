@@ -28,9 +28,9 @@ public class PeopleManagement {
 
     private String parentage;
 
-    @OneToMany(mappedBy = "peopleManagement")
+    @OneToMany(mappedBy = "peopleManagement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<AddressRegister> addressRegisterList;
 
-    @OneToMany(mappedBy = "peopleManagement")
+    @OneToMany(mappedBy = "peopleManagement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<HomeApplianceManagement> homeApplianceList;
 }

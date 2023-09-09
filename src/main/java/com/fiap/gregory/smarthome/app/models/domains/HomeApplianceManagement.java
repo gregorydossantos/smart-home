@@ -21,7 +21,7 @@ public class HomeApplianceManagement {
     private String brand;
     private Integer voltage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "people_id")
     private PeopleManagement peopleManagement;
 }
