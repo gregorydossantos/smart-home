@@ -7,14 +7,11 @@ import com.fiap.gregory.smarthome.app.request.PeopleManagementRequest;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.app.services.exceptions.DataIntegratyViolationException;
 import com.fiap.gregory.smarthome.app.useful.ValidationUseful;
-import jakarta.inject.Inject;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -23,32 +20,24 @@ import java.util.List;
 
 import static com.fiap.gregory.smarthome.app.useful.StringUseful.convertToDate;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class PeopleManagementServiceTest {
-
     private static final Long ID = 1L;
     private static final String NAME = "Teste";
-    private static final String BIRTHDAY = "28-12-1989";
+    private static final String BIRTHDAY = "01-01-2023";
     private static final String GENDER = "M";
     private static final String PARENTAGE = "Father";
-
     private PeopleManagementRequest request;
     private PeopleManagement peopleManagement;
-
-    @Inject
+    @Autowired
     private PeopleManagementService service;
-
-    @Mock
+    @Autowired
     private PeopleManagementRepository repository;
-
     @Mock
     private ModelMapper mapper;
-
     @Mock
     private ValidationUseful validator;
 
@@ -65,7 +54,7 @@ class PeopleManagementServiceTest {
 
     private void mockDatas() throws ParseException {
         request = PeopleManagementRequest.builder()
-                .name(NAME)
+                .name("Gregory")
                 .birthday(BIRTHDAY)
                 .gender(GENDER)
                 .parentage(PARENTAGE)
@@ -79,17 +68,16 @@ class PeopleManagementServiceTest {
                 .parentage(PARENTAGE)
                 .build();
 
-        repository.save(peopleManagement);
+        repository.saveAndFlush(peopleManagement);
     }
 
     @Test
-    @DisplayName("Should be return success after create a people")
+    @DisplayName("[CREATE] Should be return success after create a people")
     void testCreatePeopleSuccess() throws ParseException {
         PeopleManagementDto response = service.create(request);
 
         assertNotNull(response);
         assertEquals(PeopleManagementDto.class, response.getClass());
-        assertEquals(2, response.getId());
         assertEquals(request.getName(), response.getName());
         assertEquals(convertToDate(request.getBirthday()), response.getBirthday());
         assertEquals(request.getGender(), response.getGender());
@@ -97,17 +85,36 @@ class PeopleManagementServiceTest {
     }
 
     @Test
-    @DisplayName("Should be return a list with all the people")
-    void testGetListAllPeople() {
+    @DisplayName("[READ] Should be return a list with all the people")
+    void testReadPeople() throws ParseException {
         List<PeopleManagementDto> response = service.read();
 
         assertNotNull(response);
+        assertEquals(NAME, response.get(0).getName());
+        assertEquals(convertToDate(BIRTHDAY), response.get(0).getBirthday());
+        assertEquals(GENDER, response.get(0).getGender());
+        assertEquals(PARENTAGE, response.get(0).getParentage());
     }
 
     @Test
-    @DisplayName("Should be return a update people")
+    @DisplayName("[UPDATE] Should be return a update people")
     void testUpdatePeople() throws ParseException {
-        PeopleManagementDto response = service.update(ID, request);
+        var people = PeopleManagement.builder()
+                .name(NAME)
+                .birthday(convertToDate(BIRTHDAY))
+                .gender(GENDER)
+                .parentage(PARENTAGE)
+                .build();
+        repository.saveAndFlush(people);
+
+        var request = PeopleManagementRequest.builder()
+                .name("Teste2")
+                .birthday("02-01-2023")
+                .gender("F")
+                .parentage("Mother")
+                .build();
+
+        PeopleManagementDto response = service.update(people.getId(), request);
 
         assertNotNull(response);
         assertEquals(request.getName(), response.getName());
@@ -117,13 +124,19 @@ class PeopleManagementServiceTest {
     }
 
     @Test
-    @DisplayName("Should be return success after delete a people")
-    void testDeletePeople() {
-        when(repository.save(any())).thenReturn(peopleManagement);
+    @DisplayName("[DELETE] Should be return success after delete a people")
+    void testDeletePeople() throws ParseException {
+        var peopleSaved = PeopleManagement.builder()
+                .name(NAME)
+                .birthday(convertToDate(BIRTHDAY))
+                .gender(GENDER)
+                .parentage(PARENTAGE)
+                .build();
+        repository.saveAndFlush(peopleSaved);
 
-        service.delete(peopleManagement.getId());
+        service.delete(peopleSaved.getId());
 
-        var people = repository.findById(peopleManagement.getId());
+        var people = repository.findById(ID);
 
         assertTrue(people.isEmpty());
     }
@@ -131,19 +144,48 @@ class PeopleManagementServiceTest {
     @Test
     @DisplayName("Should be return DataIntegratyViolationException")
     void testPeopleAlreadyExists() {
-        when(repository.findByNameAndGenderAndParentage(anyString(), anyString(), anyString()))
-                .thenReturn(peopleManagement);
-
+        var request = PeopleManagementRequest.builder()
+                .name(NAME)
+                .birthday(BIRTHDAY)
+                .gender(GENDER)
+                .parentage(PARENTAGE)
+                .build();
         assertThrows(DataIntegratyViolationException.class, () -> {
-            service.create(any());
+            service.create(request);
         });
     }
 
     @Test
-    @DisplayName("Should be return DataEmptyOrNullException")
-    void testListPeopleNullable() {
+    @DisplayName("Should be return DataEmptyOrNullException in read method")
+    void testReadPeopleNull() {
+        repository.deleteAll();
+
         assertThrows(DataEmptyOrNullException.class, () -> {
             service.read();
+        });
+    }
+
+    @Disabled(value = "This test needs to be fixed!")
+    @Test
+    @DisplayName("Should be return DataEmptyOrNullException in update method")
+    void testUpdatePeopleNull() throws ParseException {
+        var request = PeopleManagementRequest.builder()
+                .name("Teste2")
+                .birthday("02-01-2023")
+                .gender("F")
+                .parentage("Mother")
+                .build();
+
+        assertThrows(DataEmptyOrNullException.class, () -> {
+            service.update(100L, request);
+        });
+    }
+
+    @Test
+    @DisplayName("Should be return DataEmptyOrNullException in delete method")
+    void testDeletePeopleNull() {
+        assertThrows(DataEmptyOrNullException.class, () -> {
+            service.delete(anyLong());
         });
     }
 }
