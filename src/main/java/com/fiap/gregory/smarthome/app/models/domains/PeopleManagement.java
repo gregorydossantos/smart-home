@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Builder
 @Data
@@ -27,10 +26,4 @@ public class PeopleManagement {
     private String gender;
 
     private String parentage;
-
-    @OneToMany(mappedBy = "peopleManagement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<AddressRegister> addressRegisterList;
-
-    @OneToMany(mappedBy = "peopleManagement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<HomeApplianceManagement> homeApplianceList;
 }

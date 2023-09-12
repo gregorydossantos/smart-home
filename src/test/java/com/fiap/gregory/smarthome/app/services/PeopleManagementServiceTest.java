@@ -32,15 +32,22 @@ class PeopleManagementServiceTest {
     private static final String BIRTHDAY = "01-01-2023";
     private static final String GENDER = "M";
     private static final String PARENTAGE = "Father";
+
     private PeopleManagementRequest request;
+
     private PeopleManagementDto dto;
+
     private PeopleManagement peopleManagement;
+
     @InjectMocks
     private PeopleManagementService service;
+
     @Mock
     private PeopleManagementRepository repository;
+
     @Mock
     private ModelMapper mapper;
+
     @Mock
     private ValidationUseful validator;
 
