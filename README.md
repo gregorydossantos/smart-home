@@ -20,19 +20,19 @@ This project consists of creating a rest api, using the main technologies availa
 
 ### API Documentation
 #### DDD
-![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/ddd-smart-home.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/develop/assets/ddd-smart-home.png)
 
 #### Database Model
-![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/entity-relationship.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/develop/assets/entity-relationship.png)
 
 #### Sequence Diagram - API People
-![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-post.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/develop/assets/people-post.png)
 <br />
-![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-get.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/develop/assets/people-get.png)
 <br />
-![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-put.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/develop/assets/people-put.png)
 <br />
-![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-delete.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/develop/assets/people-delete.png)
 
 #### Notes:
 To create the database and upload it locally, first confirm that you have docker installed on your machine, after that follow these steps:
