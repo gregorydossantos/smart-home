@@ -20,5 +20,5 @@ public class HomeApplianceManagementDto {
     private String model;
     private String brand;
     private Integer voltage;
-    private PeopleManagementDto peopleManagementDto;
+    private PeopleManagementDto peopleManagement;
 }

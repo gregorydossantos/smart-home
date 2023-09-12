@@ -21,5 +21,5 @@ public class AddressRegisterDto {
     private String district;
     private String city;
     private String state;
-    private PeopleManagementDto peopleManagementDto;
+    private PeopleManagementDto peopleManagement;
 }
