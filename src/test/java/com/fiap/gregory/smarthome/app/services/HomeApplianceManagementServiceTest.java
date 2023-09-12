@@ -82,7 +82,7 @@ class HomeApplianceManagementServiceTest {
                 .model(MODEL)
                 .brand(BRAND)
                 .voltage(VOLTAGE)
-                .peopleManagementDto(PeopleManagementDto.builder()
+                .peopleManagement(PeopleManagementDto.builder()
                         .id(1L)
                         .name("Teste")
                         .birthday(convertToDate("01-01-2023"))

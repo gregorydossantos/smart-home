@@ -85,7 +85,7 @@ class AddressRegisterServiceTest {
                 .district(DISTRICT)
                 .city(CITY)
                 .state(STATE)
-                .peopleManagementDto(PeopleManagementDto.builder()
+                .peopleManagement(PeopleManagementDto.builder()
                         .id(1L)
                         .name("Teste")
                         .birthday(convertToDate("01-01-2023"))
