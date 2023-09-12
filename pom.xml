@@ -17,6 +17,7 @@
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+		<modelmapper.version>3.1.1</modelmapper.version>
     </properties>
 	<dependencies>
 		<dependency>
@@ -55,7 +56,7 @@
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
-			<version>3.1.1</version>
+			<version>${modelmapper.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -77,6 +78,35 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/SmartHomeApplication.class</exclude>
+						<exclude>**/app/annotations/*</exclude>
+						<exclude>**/app/config/*</exclude>
+						<exclude>**/app/models/**</exclude>
+						<exclude>**/app/repositories/*</exclude>
+						<exclude>**/app/request/*</exclude>
+						<exclude>**/app/useful/*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

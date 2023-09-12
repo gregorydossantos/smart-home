@@ -42,9 +42,9 @@ public class HomeApplianceManagementService {
         validator.validateRequest(request);
 
         existsHomeAppliance(request);
-        var homeApplianceManagement = repository.save(convertToDomain(request));
+        var homeAppliance = repository.save(convertToDomain(request));
 
-        return mapper.map(homeApplianceManagement, HomeApplianceManagementDto.class);
+        return mapper.map(homeAppliance, HomeApplianceManagementDto.class);
     }
 
     public List<HomeApplianceManagementDto> read() {
