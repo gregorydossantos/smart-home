@@ -26,7 +26,10 @@ This project consists of creating a rest api, using the main technologies availa
 ![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/entity-relationship.png)
 
 #### Sequence Diagram - API People
-![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/usecase.drawio)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-post.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-get.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-put.png)
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-delete.png)
 
 #### Notes:
 To create the database and upload it locally, first confirm that you have docker installed on your machine, after that follow these steps:
