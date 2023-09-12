@@ -39,81 +39,9 @@ To create the database and upload it locally, first confirm that you have docker
 <br/> - cd smart-home/docker
 <br/> - sudo docker-compose up -d (to start database)
 <br/> - sudo docker-compose down -d (to finish database)
-### Endpoints:
-#### /address-register:
-    Entry (request)
-    {
-      "street" : "String",
-      "number" : "String",
-      "district" : "String",
-      "city" : "String",
-      "state" : "String(2)"
-    }
-    Output (response)
-    Status Code: 201 (CREATED)
-    Status Code: 400 (BAD_REQUEST)
-    {
-      "timestamp": "2023-07-03T13:21:34.909056875",
-      "status": 400,
-      "error": "Erro no contexto da requisição!",
-      "path": "/address-register"
-    }
-    Status Code: 400 (BAD_REQUEST)
-      {
-        "timestamp": "2023-07-03T13:21:34.909056875",
-        "status": 400,
-        "error": "Endereço já cadastrado!",
-        "path": "/address-register"
-      }
-#### /home-appliance:
-    Entry (request)
-    {
-      "name" : "String",
-      "model" : "String",
-      "brand" : "String",
-      "voltage" : "String"
-    }
-    Output (response)
-    Status Code: 201 (CREATED)
-    Status Code: 400 (BAD_REQUEST)
-    {
-      "timestamp": "2023-07-03T13:21:34.909056875",
-      "status": 400,
-      "error": "Erro no contexto da requisição!",
-      "path": "/address-register"
-    }
-    Status Code: 400 (BAD_REQUEST)
-    {
-      "timestamp": "2023-07-03T13:21:34.909056875",
-      "status": 400,
-      "error": "Eletrodoméstico já cadastrado!",
-      "path": "/home-appliance"
-    }
-#### /people:
-    Entry (request)
-    {
-      "name" : "String",
-      "birthday" : "String",
-      "gender" : "String(1)",
-      "parentage" : "String",
-      "ativo" : "String"
-    }
-    Output (response)
-    Status Code: 201 (CREATED)
-    Status Code: 400 (BAD_REQUEST)
-    {
-      "timestamp": "2023-07-03T13:21:34.909056875",
-      "status": 400,
-      "error": "Erro no contexto da requisição!",
-      "path": "/people"
-    }
-    Status Code: 400 (BAD_REQUEST)
-    {
-      "timestamp": "2023-07-03T13:21:34.909056875",
-      "status": 400,
-      "error": "Pessoa já cadastrada!",
-      "path": "/people"
-    }
+### Endpoints (Swagger):
+After running the project, we can access the API documentation through Swagger: <br/>
+Link: http://localhost:8080/swagger-ui/index.html#/
   
 ### Observation
 Project is still under development ... 
