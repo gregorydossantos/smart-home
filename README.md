@@ -25,6 +25,9 @@ This project consists of creating a rest api, using the main technologies availa
 #### Database Model
 ![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/entity-relationship.png)
 
+#### Sequence Diagram - API People
+![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/usecase.drawio)
+
 #### Notes:
 To create the database and upload it locally, first confirm that you have docker installed on your machine, after that follow these steps:
 <br/> - cd smart-home/docker
