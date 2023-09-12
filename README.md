@@ -27,8 +27,11 @@ This project consists of creating a rest api, using the main technologies availa
 
 #### Sequence Diagram - API People
 ![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-post.png)
+<br />
 ![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-get.png)
+<br />
 ![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-put.png)
+<br />
 ![Web 1](https://github.com/gregorydossantos/smart-home/blob/feature/data-persistence/assets/people-delete.png)
 
 #### Notes:
