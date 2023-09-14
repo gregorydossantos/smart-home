@@ -91,12 +91,13 @@
 				<configuration>
 					<excludes>
 						<exclude>**/SmartHomeApplication.class</exclude>
-						<exclude>**/app/annotations/*</exclude>
 						<exclude>**/app/config/*</exclude>
-						<exclude>**/app/models/**</exclude>
-						<exclude>**/app/repositories/*</exclude>
 						<exclude>**/app/request/*</exclude>
-						<exclude>**/app/useful/*</exclude>
+						<exclude>**/domain/annotations/*</exclude>
+						<exclude>**/domain/dtos/*</exclude>
+						<exclude>**/domain/useful/*</exclude>
+						<exclude>**/infra/db/models/*</exclude>
+						<exclude>**/infra/db/repositories/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

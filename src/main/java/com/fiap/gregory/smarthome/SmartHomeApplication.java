@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @OpenAPIDefinition(info = @Info(title = "Smart-Home", version = "1.0",
 		description = "This is an API that will allow you to manage people and appliance from your home"))
-@EntityScan(basePackages = "com.fiap.gregory.smarthome.app.models.domains")
-@EnableJpaRepositories(basePackages = "com.fiap.gregory.smarthome.app.repositories")
+@EntityScan(basePackages = "com.fiap.gregory.smarthome.infra.db.models")
+@EnableJpaRepositories(basePackages = "com.fiap.gregory.smarthome.infra.db.repositories")
 @SpringBootApplication
 public class SmartHomeApplication {
 
