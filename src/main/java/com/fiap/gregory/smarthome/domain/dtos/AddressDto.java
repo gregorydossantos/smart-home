@@ -12,7 +12,7 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressRegisterDto {
+public class AddressDto {
 
     @JsonProperty(access = WRITE_ONLY)
     private Long id;
@@ -21,5 +21,5 @@ public class AddressRegisterDto {
     private String district;
     private String city;
     private String state;
-    private PeopleManagementDto peopleManagement;
+    private PeopleDto peopleManagement;
 }

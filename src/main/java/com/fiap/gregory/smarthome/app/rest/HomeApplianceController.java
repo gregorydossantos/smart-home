@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.app.rest;
 
 import com.fiap.gregory.smarthome.app.request.ApplianceRequest;
-import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceDto;
 import com.fiap.gregory.smarthome.domain.services.HomeApplianceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,7 +40,7 @@ public class HomeApplianceController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HomeApplianceManagementDto> create(@RequestBody ApplianceRequest request) {
+    public ResponseEntity<HomeApplianceDto> create(@RequestBody ApplianceRequest request) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(service.create(request)).toUri();
         return ResponseEntity.created(uri).build();
     }
@@ -52,7 +52,7 @@ public class HomeApplianceController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @GetMapping
-    public ResponseEntity<List<HomeApplianceManagementDto>> readAll() {
+    public ResponseEntity<List<HomeApplianceDto>> readAll() {
         return ResponseEntity.ok(service.read());
     }
 
@@ -63,8 +63,8 @@ public class HomeApplianceController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @PutMapping(value = PATH_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HomeApplianceManagementDto> update(@PathVariable("id") Long id,
-                                                     @RequestBody ApplianceRequest request) {
+    public ResponseEntity<HomeApplianceDto> update(@PathVariable("id") Long id,
+                                                   @RequestBody ApplianceRequest request) {
         return ResponseEntity.ok(service.update(id, request));
     }
 

@@ -1,8 +1,8 @@
 package com.fiap.gregory.smarthome.domain.usecases;
 
 import com.fiap.gregory.smarthome.app.request.AddressRequest;
-import com.fiap.gregory.smarthome.domain.dtos.AddressRegisterDto;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.AddressDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataIntegratyViolationException;
 import com.fiap.gregory.smarthome.domain.useful.ValidationUseful;
@@ -47,7 +47,7 @@ class AddressUseCaseTest {
 
     private AddressRequest request;
 
-    private AddressRegisterDto dto;
+    private AddressDto dto;
 
     private Address address;
 
@@ -84,14 +84,14 @@ class AddressUseCaseTest {
                 .peopleId("1")
                 .build();
 
-        dto = AddressRegisterDto.builder()
+        dto = AddressDto.builder()
                 .id(ID)
                 .street(STREET)
                 .number(NUMBER)
                 .district(DISTRICT)
                 .city(CITY)
                 .state(STATE)
-                .peopleManagement(PeopleManagementDto.builder()
+                .peopleManagement(PeopleDto.builder()
                         .id(1L)
                         .name("Teste")
                         .birthday(convertToDate("01-01-2023"))
@@ -132,10 +132,10 @@ class AddressUseCaseTest {
         when(repository.save(any())).thenReturn(address);
         when(mapper.map(any(), any())).thenReturn(dto);
 
-        AddressRegisterDto response = useCase.create(request);
+        AddressDto response = useCase.create(request);
 
         assertNotNull(response);
-        assertEquals(AddressRegisterDto.class, response.getClass());
+        assertEquals(AddressDto.class, response.getClass());
         assertEquals(address.getId(), response.getId());
         assertEquals(address.getStreet(), response.getStreet());
         assertEquals(address.getNumber(), response.getNumber());
@@ -150,7 +150,7 @@ class AddressUseCaseTest {
         when(repository.findAll()).thenReturn(List.of(address));
         when(mapper.map(any(), any())).thenReturn(dto);
 
-        List<AddressRegisterDto> response = useCase.read();
+        List<AddressDto> response = useCase.read();
         assertNotNull(response);
     }
 
@@ -170,7 +170,7 @@ class AddressUseCaseTest {
                 .peopleId("1")
                 .build();
 
-        AddressRegisterDto response = useCase.update(1L, request);
+        AddressDto response = useCase.update(1L, request);
         assertNotNull(response);
         assertNotEquals(response.getStreet(), request.getStreet());
         assertNotEquals(response.getNumber(), Integer.parseInt(request.getNumber()));

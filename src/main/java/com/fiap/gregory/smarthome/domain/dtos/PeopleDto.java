@@ -14,7 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PeopleManagementDto {
+public class PeopleDto {
 
     @JsonProperty(access = WRITE_ONLY)
     private Long id;

@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.domain.services;
 
 import com.fiap.gregory.smarthome.app.request.PeopleRequest;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.usecases.PeopleUseCase;
 import com.fiap.gregory.smarthome.infra.db.models.People;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ class PeopleServiceTest {
 
     private PeopleRequest request;
 
-    private PeopleManagementDto dto;
+    private PeopleDto dto;
 
     private People people;
 
@@ -52,7 +52,7 @@ class PeopleServiceTest {
                 .parentage(PARENTAGE)
                 .build();
 
-        dto = PeopleManagementDto.builder()
+        dto = PeopleDto.builder()
                 .id(ID)
                 .name(NAME)
                 .birthday(convertToDate(BIRTHDAY))

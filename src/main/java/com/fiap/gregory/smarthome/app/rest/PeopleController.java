@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.app.rest;
 
 import com.fiap.gregory.smarthome.app.request.PeopleRequest;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.services.PeopleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,7 +40,7 @@ public class PeopleController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PeopleManagementDto> create(@RequestBody PeopleRequest request) {
+    public ResponseEntity<PeopleDto> create(@RequestBody PeopleRequest request) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .buildAndExpand(service.create(request)).toUri();
         return ResponseEntity.created(uri).build();
@@ -53,7 +53,7 @@ public class PeopleController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @GetMapping
-    public ResponseEntity<List<PeopleManagementDto>> readAll() {
+    public ResponseEntity<List<PeopleDto>> readAll() {
         return ResponseEntity.ok(service.read());
     }
 
@@ -64,8 +64,8 @@ public class PeopleController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @PutMapping(value = PATH_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PeopleManagementDto> update(@PathVariable("id") Long id,
-                                                      @RequestBody PeopleRequest request) {
+    public ResponseEntity<PeopleDto> update(@PathVariable("id") Long id,
+                                            @RequestBody PeopleRequest request) {
         return ResponseEntity.ok(service.update(id, request));
     }
 

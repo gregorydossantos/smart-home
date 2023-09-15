@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.app.rest;
 
 import com.fiap.gregory.smarthome.app.request.PeopleRequest;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.services.PeopleService;
 import com.fiap.gregory.smarthome.domain.usecases.PeopleUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ class PeopleControllerTest {
     private final static String PARENTAGE = "Father";
 
     private PeopleRequest request;
-    private PeopleManagementDto peopleManagementDto;
+    private PeopleDto peopleDto;
 
     @InjectMocks
     private PeopleController controller;
@@ -53,7 +53,7 @@ class PeopleControllerTest {
     }
 
     private void mockDatas() throws ParseException {
-        peopleManagementDto = PeopleManagementDto.builder()
+        peopleDto = PeopleDto.builder()
                 .id(ID)
                 .name(NAME)
                 .birthday(convertToDate(BIRHDAY))
@@ -72,9 +72,9 @@ class PeopleControllerTest {
     @Test
     @DisplayName("Should be return a Http status 201 - Created")
     void testCreateAddressWithSuccess() {
-        when(service.create(any())).thenReturn(peopleManagementDto);
+        when(service.create(any())).thenReturn(peopleDto);
 
-        ResponseEntity<PeopleManagementDto> response = controller.create(request);
+        ResponseEntity<PeopleDto> response = controller.create(request);
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -83,7 +83,7 @@ class PeopleControllerTest {
     @Test
     @DisplayName("Should be return a list with all the people")
     void testGetAListAllPeople() {
-        ResponseEntity<List<PeopleManagementDto>> response = controller.readAll();
+        ResponseEntity<List<PeopleDto>> response = controller.readAll();
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -92,9 +92,9 @@ class PeopleControllerTest {
     @Test
     @DisplayName("Should be return update people")
     void testUpdatePeopleSuccess() {
-        when(service.update(anyLong(), any())).thenReturn(peopleManagementDto);
+        when(service.update(anyLong(), any())).thenReturn(peopleDto);
 
-        ResponseEntity<PeopleManagementDto> response = controller.update(ID, request);
+        ResponseEntity<PeopleDto> response = controller.update(ID, request);
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.OK, response.getStatusCode());

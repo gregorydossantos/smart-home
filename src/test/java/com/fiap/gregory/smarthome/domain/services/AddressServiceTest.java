@@ -1,8 +1,8 @@
 package com.fiap.gregory.smarthome.domain.services;
 
 import com.fiap.gregory.smarthome.app.request.AddressRequest;
-import com.fiap.gregory.smarthome.domain.dtos.AddressRegisterDto;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.AddressDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.usecases.AddressUseCase;
 import com.fiap.gregory.smarthome.infra.db.models.Address;
 import com.fiap.gregory.smarthome.infra.db.models.People;
@@ -31,7 +31,7 @@ class AddressServiceTest {
 
     private AddressRequest request;
 
-    private AddressRegisterDto dto;
+    private AddressDto dto;
 
     private Address address;
 
@@ -59,14 +59,14 @@ class AddressServiceTest {
                 .peopleId("1")
                 .build();
 
-        dto = AddressRegisterDto.builder()
+        dto = AddressDto.builder()
                 .id(ID)
                 .street(STREET)
                 .number(NUMBER)
                 .district(DISTRICT)
                 .city(CITY)
                 .state(STATE)
-                .peopleManagement(PeopleManagementDto.builder()
+                .peopleManagement(PeopleDto.builder()
                         .id(1L)
                         .name("Teste")
                         .birthday(convertToDate("01-01-2023"))

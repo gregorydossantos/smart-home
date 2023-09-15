@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.app.rest;
 
 import com.fiap.gregory.smarthome.app.request.AddressRequest;
-import com.fiap.gregory.smarthome.domain.dtos.AddressRegisterDto;
+import com.fiap.gregory.smarthome.domain.dtos.AddressDto;
 import com.fiap.gregory.smarthome.domain.services.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,7 +40,7 @@ public class AddressController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AddressRegisterDto> create(@RequestBody AddressRequest request) {
+    public ResponseEntity<AddressDto> create(@RequestBody AddressRequest request) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(service.create(request)).toUri();
         return ResponseEntity.created(uri).build();
     }
@@ -52,7 +52,7 @@ public class AddressController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @GetMapping
-    public ResponseEntity<List<AddressRegisterDto>> readAll() {
+    public ResponseEntity<List<AddressDto>> readAll() {
         return ResponseEntity.ok(service.read());
     }
 
@@ -63,8 +63,8 @@ public class AddressController {
             @ApiResponse(responseCode = "500", description = "Internal error")
     })
     @PutMapping(value = PATH_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AddressRegisterDto> update(@PathVariable("id") Long id,
-                                                     @RequestBody AddressRequest request) {
+    public ResponseEntity<AddressDto> update(@PathVariable("id") Long id,
+                                             @RequestBody AddressRequest request) {
         return ResponseEntity.ok(service.update(id, request));
     }
 

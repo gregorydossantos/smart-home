@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.domain.usecases;
 
 import com.fiap.gregory.smarthome.app.request.AddressRequest;
-import com.fiap.gregory.smarthome.domain.dtos.AddressRegisterDto;
+import com.fiap.gregory.smarthome.domain.dtos.AddressDto;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataIntegratyViolationException;
 import com.fiap.gregory.smarthome.domain.useful.ValidationUseful;
@@ -30,28 +30,28 @@ public class AddressUseCase {
     final ModelMapper mapper;
     final ValidationUseful validator;
 
-    public AddressRegisterDto create(AddressRequest request) {
+    public AddressDto create(AddressRequest request) {
         validator.validateRequest(request);
 
         addressExists(request);
         var people = peopleExists(Long.valueOf(request.getPeopleId()));
         var address = repository.save(toDomain(request, people));
 
-        return mapper.map(address, AddressRegisterDto.class);
+        return mapper.map(address, AddressDto.class);
     }
 
-    public List<AddressRegisterDto> read() {
+    public List<AddressDto> read() {
         var addressList = repository.findAll();
 
         if (addressList.isEmpty()) {
             throw new DataEmptyOrNullException(ADDRESS_NOT_FOUND);
         }
 
-        return addressList.stream().map(address -> mapper.map(address, AddressRegisterDto.class))
+        return addressList.stream().map(address -> mapper.map(address, AddressDto.class))
                 .collect(Collectors.toList());
     }
 
-    public AddressRegisterDto update(Long id, AddressRequest request) {
+    public AddressDto update(Long id, AddressRequest request) {
         validator.validateRequest(request);
 
         var address = repository.findById(id);
@@ -63,7 +63,7 @@ public class AddressUseCase {
         var people = peopleExists(Long.valueOf(request.getPeopleId()));
         var addressChange = updateAddress(address.get(), request, people);
 
-        return mapper.map(addressChange, AddressRegisterDto.class);
+        return mapper.map(addressChange, AddressDto.class);
     }
 
     public void delete(Long id) {

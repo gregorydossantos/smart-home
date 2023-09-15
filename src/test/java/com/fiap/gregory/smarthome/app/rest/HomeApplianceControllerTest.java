@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.app.rest;
 
 import com.fiap.gregory.smarthome.app.request.ApplianceRequest;
-import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceDto;
 import com.fiap.gregory.smarthome.domain.services.HomeApplianceService;
 import com.fiap.gregory.smarthome.domain.usecases.HomeApplianceUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 class HomeApplianceControllerTest {
 
     private ApplianceRequest request;
-    private HomeApplianceManagementDto homeApplianceManagementDto;
+    private HomeApplianceDto homeApplianceDto;
 
     @InjectMocks
     private HomeApplianceController controller;
@@ -45,7 +45,7 @@ class HomeApplianceControllerTest {
     }
 
     private void mockDatas() {
-        homeApplianceManagementDto = HomeApplianceManagementDto.builder()
+        homeApplianceDto = HomeApplianceDto.builder()
                 .id(1L)
                 .name("Teste")
                 .model("Teste")
@@ -64,9 +64,9 @@ class HomeApplianceControllerTest {
     @Test
     @DisplayName("Should be return a Http status 201 - Created")
     void testCreateHomeApplianceWithSuccess() {
-        when(service.create(any())).thenReturn(homeApplianceManagementDto);
+        when(service.create(any())).thenReturn(homeApplianceDto);
 
-        ResponseEntity<HomeApplianceManagementDto> response = controller.create(request);
+        ResponseEntity<HomeApplianceDto> response = controller.create(request);
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -75,9 +75,9 @@ class HomeApplianceControllerTest {
     @Test
     @DisplayName("Should be return a list whit all the home appliance")
     void testReadAllHomeAppliance() {
-        when(service.read()).thenReturn(List.of(homeApplianceManagementDto));
+        when(service.read()).thenReturn(List.of(homeApplianceDto));
 
-        ResponseEntity<List<HomeApplianceManagementDto>> response = controller.readAll();
+        ResponseEntity<List<HomeApplianceDto>> response = controller.readAll();
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -86,9 +86,9 @@ class HomeApplianceControllerTest {
     @Test
     @DisplayName("Should be return an update home appliance")
     void testUpdateHomeAppliance() {
-        when(service.update(anyLong(), any())).thenReturn(homeApplianceManagementDto);
+        when(service.update(anyLong(), any())).thenReturn(homeApplianceDto);
 
-        ResponseEntity<HomeApplianceManagementDto> response = controller.update(1L, request);
+        ResponseEntity<HomeApplianceDto> response = controller.update(1L, request);
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -97,7 +97,7 @@ class HomeApplianceControllerTest {
     @Test
     @DisplayName("Should be return success after delete a home appliance")
     void testDeleteHomeAppliance() {
-        when(service.create(any())).thenReturn(homeApplianceManagementDto);
+        when(service.create(any())).thenReturn(homeApplianceDto);
 
         controller.delete(1L);
 

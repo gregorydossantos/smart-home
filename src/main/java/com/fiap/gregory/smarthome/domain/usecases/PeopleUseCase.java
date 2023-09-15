@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.domain.usecases;
 
 import com.fiap.gregory.smarthome.app.request.PeopleRequest;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataIntegratyViolationException;
 import com.fiap.gregory.smarthome.domain.useful.ValidationUseful;
@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 import static com.fiap.gregory.smarthome.domain.useful.CommonsMessages.PEOPLE_ALREADY_EXISTS;
 import static com.fiap.gregory.smarthome.domain.useful.CommonsMessages.PEOPLE_NOT_FOUND;
 import static com.fiap.gregory.smarthome.domain.useful.StringUseful.convertToDate;
-import static com.fiap.gregory.smarthome.domain.useful.StringUseful.isNullOrEmpty;
 
 @Service
 @AllArgsConstructor
@@ -28,27 +27,24 @@ public class PeopleUseCase {
     final ModelMapper mapper;
     final ValidationUseful validator;
 
-    public PeopleManagementDto create(PeopleRequest request) {
+    public PeopleDto create(PeopleRequest request) {
         validator.validateRequest(request);
-
-        peopleExists(request);
-        var peopleManagement = repository.save(convertToDomain(request));
-
-        return mapper.map(peopleManagement, PeopleManagementDto.class);
+        var people = peopleExists(request);
+        return mapper.map(people, PeopleDto.class);
     }
 
-    public List<PeopleManagementDto> read() {
+    public List<PeopleDto> read() {
         var peopleList = repository.findAll();
 
         if (peopleList.isEmpty()) {
             throw new DataEmptyOrNullException(PEOPLE_NOT_FOUND);
         }
 
-        return peopleList.stream().map(peopleManagement -> mapper.map(peopleManagement, PeopleManagementDto.class))
+        return peopleList.stream().map(peopleManagement -> mapper.map(peopleManagement, PeopleDto.class))
                 .collect(Collectors.toList());
     }
 
-    public PeopleManagementDto update(Long id, PeopleRequest request) {
+    public PeopleDto update(Long id, PeopleRequest request) {
         validator.validateRequest(request);
 
         var people = repository.findById(id);
@@ -59,7 +55,7 @@ public class PeopleUseCase {
 
         var peopleChange = updatePeople(people.get(), request);
 
-        return mapper.map(peopleChange, PeopleManagementDto.class);
+        return mapper.map(peopleChange, PeopleDto.class);
     }
 
     public void delete(Long id) {
@@ -71,12 +67,17 @@ public class PeopleUseCase {
         repository.delete(people.get());
     }
 
-    private void peopleExists(PeopleRequest request) {
-        var peopleManagement = repository.findByNameAndGenderAndParentage(request.getName(), request.getGender(),
+    private People peopleExists(PeopleRequest request) {
+        var peopleOptional = repository.findByNameAndGenderAndParentage(request.getName(), request.getGender(),
                 request.getParentage());
-        if (!isNullOrEmpty(peopleManagement)) {
+
+        if (peopleOptional.isPresent()) {
             throw new DataIntegratyViolationException(PEOPLE_ALREADY_EXISTS);
         }
+
+        var people = convertToDomain(request);
+        repository.save(people);
+        return people;
     }
 
     @SneakyThrows

@@ -12,7 +12,7 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HomeApplianceManagementDto {
+public class HomeApplianceDto {
 
     @JsonProperty(access = WRITE_ONLY)
     private Long id;
@@ -20,5 +20,5 @@ public class HomeApplianceManagementDto {
     private String model;
     private String brand;
     private Integer voltage;
-    private PeopleManagementDto peopleManagement;
+    private PeopleDto peopleManagement;
 }

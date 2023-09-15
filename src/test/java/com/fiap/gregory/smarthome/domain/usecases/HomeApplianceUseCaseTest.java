@@ -1,8 +1,8 @@
 package com.fiap.gregory.smarthome.domain.usecases;
 
 import com.fiap.gregory.smarthome.app.request.ApplianceRequest;
-import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceManagementDto;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataIntegratyViolationException;
 import com.fiap.gregory.smarthome.domain.useful.ValidationUseful;
@@ -46,7 +46,7 @@ class HomeApplianceUseCaseTest {
 
     private ApplianceRequest request;
 
-    private HomeApplianceManagementDto dto;
+    private HomeApplianceDto dto;
 
     private HomeAppliance homeAppliance;
 
@@ -82,13 +82,13 @@ class HomeApplianceUseCaseTest {
                 .peopleId("1")
                 .build();
 
-        dto = HomeApplianceManagementDto.builder()
+        dto = HomeApplianceDto.builder()
                 .id(ID)
                 .name(NAME)
                 .model(MODEL)
                 .brand(BRAND)
                 .voltage(VOLTAGE)
-                .peopleManagement(PeopleManagementDto.builder()
+                .peopleManagement(PeopleDto.builder()
                         .id(1L)
                         .name("Teste")
                         .birthday(convertToDate("01-01-2023"))
@@ -128,10 +128,10 @@ class HomeApplianceUseCaseTest {
         when(repository.save(any())).thenReturn(homeAppliance);
         when(mapper.map(any(), any())).thenReturn(dto);
 
-        HomeApplianceManagementDto response = useCase.create(request);
+        HomeApplianceDto response = useCase.create(request);
 
         assertNotNull(response);
-        assertEquals(HomeApplianceManagementDto.class, response.getClass());
+        assertEquals(HomeApplianceDto.class, response.getClass());
         assertEquals(homeAppliance.getId(), response.getId());
         assertEquals(homeAppliance.getName(), response.getName());
         assertEquals(homeAppliance.getModel(), response.getModel());
@@ -145,7 +145,7 @@ class HomeApplianceUseCaseTest {
         when(repository.findAll()).thenReturn(List.of(homeAppliance));
         when(mapper.map(any(), any())).thenReturn(dto);
 
-        List<HomeApplianceManagementDto> response = useCase.read();
+        List<HomeApplianceDto> response = useCase.read();
         assertNotNull(response);
     }
 
@@ -164,7 +164,7 @@ class HomeApplianceUseCaseTest {
                 .peopleId("1")
                 .build();
 
-        HomeApplianceManagementDto response = useCase.update(ID, request);
+        HomeApplianceDto response = useCase.update(ID, request);
 
         assertNotNull(response);
         assertNotEquals(homeAppliance.getName(), response.getName());

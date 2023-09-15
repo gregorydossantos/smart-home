@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.domain.usecases;
 
 import com.fiap.gregory.smarthome.app.request.ApplianceRequest;
-import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceDto;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataIntegratyViolationException;
 import com.fiap.gregory.smarthome.domain.useful.ValidationUseful;
@@ -31,16 +31,16 @@ public class HomeApplianceUseCase {
     final ModelMapper mapper;
     final ValidationUseful validator;
 
-    public HomeApplianceManagementDto create(ApplianceRequest request) {
+    public HomeApplianceDto create(ApplianceRequest request) {
         validator.validateRequest(request);
 
         existsHomeAppliance(request);
         var homeAppliance = repository.save(convertToDomain(request));
 
-        return mapper.map(homeAppliance, HomeApplianceManagementDto.class);
+        return mapper.map(homeAppliance, HomeApplianceDto.class);
     }
 
-    public List<HomeApplianceManagementDto> read() {
+    public List<HomeApplianceDto> read() {
         var homeApplianceManagementList = repository.findAll();
 
         if (homeApplianceManagementList.isEmpty()) {
@@ -48,11 +48,11 @@ public class HomeApplianceUseCase {
         }
 
         return homeApplianceManagementList.stream().map(homeAppliance ->
-                        mapper.map(homeAppliance, HomeApplianceManagementDto.class))
+                        mapper.map(homeAppliance, HomeApplianceDto.class))
                 .collect(Collectors.toList());
     }
 
-    public HomeApplianceManagementDto update(Long id, ApplianceRequest request) {
+    public HomeApplianceDto update(Long id, ApplianceRequest request) {
         validator.validateRequest(request);
 
         var homeAppliance = repository.findById(id);
@@ -62,7 +62,7 @@ public class HomeApplianceUseCase {
 
         var homeApplianceManagementChange = updateHomeAppliance(homeAppliance.get(), request);
 
-        return mapper.map(homeApplianceManagementChange, HomeApplianceManagementDto.class);
+        return mapper.map(homeApplianceManagementChange, HomeApplianceDto.class);
     }
 
     public void delete(Long id) {

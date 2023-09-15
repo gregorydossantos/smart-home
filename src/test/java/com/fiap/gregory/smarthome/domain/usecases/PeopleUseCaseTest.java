@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.domain.usecases;
 
 import com.fiap.gregory.smarthome.app.request.PeopleRequest;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataEmptyOrNullException;
 import com.fiap.gregory.smarthome.domain.services.exceptions.DataIntegratyViolationException;
 import com.fiap.gregory.smarthome.domain.useful.ValidationUseful;
@@ -44,7 +44,7 @@ class PeopleUseCaseTest {
 
     private PeopleRequest request;
 
-    private PeopleManagementDto dto;
+    private PeopleDto dto;
 
     private People people;
 
@@ -79,7 +79,7 @@ class PeopleUseCaseTest {
                 .parentage(PARENTAGE)
                 .build();
 
-        dto = PeopleManagementDto.builder()
+        dto = PeopleDto.builder()
                 .id(ID)
                 .name(NAME)
                 .birthday(convertToDate(BIRTHDAY))
@@ -94,20 +94,20 @@ class PeopleUseCaseTest {
                 .gender(GENDER)
                 .parentage(PARENTAGE)
                 .build();
-
-        repository.saveAndFlush(people);
     }
 
     @Test
     @DisplayName("[CREATE] Should be return success after create a people")
     void testCreatePeopleSuccess() throws ParseException {
+        when(repository.findByNameAndGenderAndParentage(anyString(), anyString(), anyString()))
+                .thenReturn(Optional.empty());
         when(repository.save(any())).thenReturn(people);
         when(mapper.map(any(), any())).thenReturn(dto);
 
-        PeopleManagementDto response = useCase.create(request);
+        var response = useCase.create(request);
 
         assertNotNull(response);
-        assertEquals(PeopleManagementDto.class, response.getClass());
+        assertEquals(PeopleDto.class, response.getClass());
         assertEquals(request.getName(), response.getName());
         assertEquals(convertToDate(request.getBirthday()), response.getBirthday());
         assertEquals(request.getGender(), response.getGender());
@@ -120,7 +120,7 @@ class PeopleUseCaseTest {
         when(repository.findAll()).thenReturn(List.of(people));
         when(mapper.map(any(), any())).thenReturn(dto);
 
-        List<PeopleManagementDto> response = useCase.read();
+        List<PeopleDto> response = useCase.read();
 
         assertNotNull(response);
         assertEquals(NAME, response.get(0).getName());
@@ -142,7 +142,7 @@ class PeopleUseCaseTest {
         when(repository.findById(anyLong())).thenReturn(Optional.of(people));
         when(mapper.map(any(), any())).thenReturn(dto);
 
-        PeopleManagementDto response = useCase.update(ID, request);
+        PeopleDto response = useCase.update(ID, request);
 
         assertNotNull(response);
         assertNotEquals(request.getName(), response.getName());
@@ -161,8 +161,9 @@ class PeopleUseCaseTest {
     @Test
     @DisplayName("Should be return DataIntegratyViolationException")
     void testPeopleAlreadyExists() {
+        when(repository.save(any())).thenReturn(people);
         when(repository.findByNameAndGenderAndParentage(anyString(), anyString(), anyString()))
-                .thenReturn(people);
+                .thenReturn(Optional.of(people));
         assertThrows(DataIntegratyViolationException.class, () -> useCase.create(request));
     }
 

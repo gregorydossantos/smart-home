@@ -1,8 +1,8 @@
 package com.fiap.gregory.smarthome.domain.services;
 
 import com.fiap.gregory.smarthome.app.request.ApplianceRequest;
-import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceManagementDto;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.HomeApplianceDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.usecases.HomeApplianceUseCase;
 import com.fiap.gregory.smarthome.infra.db.models.HomeAppliance;
 import com.fiap.gregory.smarthome.infra.db.models.People;
@@ -30,7 +30,7 @@ class HomeApplianceServiceTest {
 
     private ApplianceRequest request;
 
-    private HomeApplianceManagementDto dto;
+    private HomeApplianceDto dto;
 
     private HomeAppliance homeAppliance;
 
@@ -57,13 +57,13 @@ class HomeApplianceServiceTest {
                 .peopleId("1")
                 .build();
 
-        dto = HomeApplianceManagementDto.builder()
+        dto = HomeApplianceDto.builder()
                 .id(ID)
                 .name(NAME)
                 .model(MODEL)
                 .brand(BRAND)
                 .voltage(VOLTAGE)
-                .peopleManagement(PeopleManagementDto.builder()
+                .peopleManagement(PeopleDto.builder()
                         .id(1L)
                         .name("Teste")
                         .birthday(convertToDate("01-01-2023"))

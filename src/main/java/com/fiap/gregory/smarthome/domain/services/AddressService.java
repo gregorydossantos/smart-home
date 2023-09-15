@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.domain.services;
 
 import com.fiap.gregory.smarthome.app.request.AddressRequest;
-import com.fiap.gregory.smarthome.domain.dtos.AddressRegisterDto;
+import com.fiap.gregory.smarthome.domain.dtos.AddressDto;
 import com.fiap.gregory.smarthome.domain.usecases.AddressUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,15 @@ public class AddressService {
 
     final AddressUseCase useCase;
 
-    public AddressRegisterDto create(AddressRequest request) {
+    public AddressDto create(AddressRequest request) {
         return useCase.create(request);
     }
 
-    public List<AddressRegisterDto> read() {
+    public List<AddressDto> read() {
         return useCase.read();
     }
 
-    public AddressRegisterDto update(Long id, AddressRequest request) {
+    public AddressDto update(Long id, AddressRequest request) {
         return useCase.update(id, request);
     }
 

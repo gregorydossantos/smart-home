@@ -1,6 +1,6 @@
 package com.fiap.gregory.smarthome.app.rest;
 
-import com.fiap.gregory.smarthome.domain.dtos.AddressRegisterDto;
+import com.fiap.gregory.smarthome.domain.dtos.AddressDto;
 import com.fiap.gregory.smarthome.app.request.AddressRequest;
 import com.fiap.gregory.smarthome.domain.services.AddressService;
 import com.fiap.gregory.smarthome.domain.usecases.AddressUseCase;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 class AddressControllerTest {
 
     private AddressRequest request;
-    private AddressRegisterDto addressRegisterDto;
+    private AddressDto addressDto;
 
     @InjectMocks
     private AddressController controller;
@@ -44,7 +44,7 @@ class AddressControllerTest {
     }
 
     private void mockDatas() {
-        addressRegisterDto = AddressRegisterDto.builder()
+        addressDto = AddressDto.builder()
                 .id(1L)
                 .street("Teste")
                 .number(123)
@@ -65,9 +65,9 @@ class AddressControllerTest {
     @Test
     @DisplayName("Should be return a Http status 201 - Created")
     void testCreateAddressWithSuccess() {
-        when(service.create(any())).thenReturn(addressRegisterDto);
+        when(service.create(any())).thenReturn(addressDto);
 
-        ResponseEntity<AddressRegisterDto> response = controller.create(request);
+        ResponseEntity<AddressDto> response = controller.create(request);
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -76,9 +76,9 @@ class AddressControllerTest {
     @Test
     @DisplayName("Should be return a list whit all the address")
     void testReadAllAddress() {
-        when(service.create(any())).thenReturn(addressRegisterDto);
+        when(service.create(any())).thenReturn(addressDto);
 
-        ResponseEntity<List<AddressRegisterDto>> response = controller.readAll();
+        ResponseEntity<List<AddressDto>> response = controller.readAll();
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -87,9 +87,9 @@ class AddressControllerTest {
     @Test
     @DisplayName("Should be return an update address")
     void testUpdateAddress() {
-        when(service.create(any())).thenReturn(addressRegisterDto);
+        when(service.create(any())).thenReturn(addressDto);
 
-        ResponseEntity<AddressRegisterDto> response = controller.update(1L, request);
+        ResponseEntity<AddressDto> response = controller.update(1L, request);
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -98,7 +98,7 @@ class AddressControllerTest {
     @Test
     @DisplayName("Should be return success after delete an address")
     void testDeleteAddress() {
-        when(service.create(any())).thenReturn(addressRegisterDto);
+        when(service.create(any())).thenReturn(addressDto);
 
         controller.delete(1L);
 

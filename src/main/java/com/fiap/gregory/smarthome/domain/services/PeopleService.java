@@ -1,7 +1,7 @@
 package com.fiap.gregory.smarthome.domain.services;
 
 import com.fiap.gregory.smarthome.app.request.PeopleRequest;
-import com.fiap.gregory.smarthome.domain.dtos.PeopleManagementDto;
+import com.fiap.gregory.smarthome.domain.dtos.PeopleDto;
 import com.fiap.gregory.smarthome.domain.usecases.PeopleUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,15 @@ public class PeopleService {
 
     final PeopleUseCase useCase;
 
-    public PeopleManagementDto create(PeopleRequest request) {
+    public PeopleDto create(PeopleRequest request) {
         return useCase.create(request);
     }
 
-    public List<PeopleManagementDto> read() {
+    public List<PeopleDto> read() {
         return useCase.read();
     }
 
-    public PeopleManagementDto update(Long id, PeopleRequest request) {
+    public PeopleDto update(Long id, PeopleRequest request) {
         return useCase.update(id, request);
     }
 
